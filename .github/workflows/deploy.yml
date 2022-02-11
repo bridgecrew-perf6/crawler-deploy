@@ -17,7 +17,7 @@ jobs:
         source ~/.bashrc
 
     - name: Create kubeconfig
-      run: yc managed-kubernetes cluster get-credentials crawler-cluster --external --cloud-id $YC_CLOUD_ID --folder-id $FOLDER_ID --token $YC_TOKEN
+      run: yc managed-kubernetes cluster get-credentials crawler-cluster --external --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID --token $YC_TOKEN
       env:
         YC_CLOUD_ID: ${{secrets.YC_CLOUD_ID}}
         YC_FOLDER_ID: ${{secrets.YC_FOLDER_ID}}
