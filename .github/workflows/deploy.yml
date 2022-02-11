@@ -16,13 +16,22 @@ jobs:
         echo "~/yandex-cloud/bin" >> $GITHUB_PATH
         source ~/.bashrc
 
+    - name: Configure yc
+      run: |
+        yc config set token $YC_TOKEN
+        yc config set cloud-id $YC_CLOUD_ID
+        yc config set folder-id $YC_FOLDER_ID
+      env:
+        YC_CLOUD_ID: ${{secrets.YC_CLOUD_ID}}
+        YC_FOLDER_ID: ${{secrets.YC_FOLDER_ID}}
+        YC_TOKEN: ${{secrets.YC_TOKEN}}
+
     - name: Create kubeconfig
       run: yc managed-kubernetes cluster get-credentials crawler-cluster --external --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID --token $YC_TOKEN
       env:
         YC_CLOUD_ID: ${{secrets.YC_CLOUD_ID}}
         YC_FOLDER_ID: ${{secrets.YC_FOLDER_ID}}
         YC_TOKEN: ${{secrets.YC_TOKEN}}
-
 
     - name: check
       shell: bash
