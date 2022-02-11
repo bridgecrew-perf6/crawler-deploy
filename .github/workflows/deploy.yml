@@ -2,6 +2,9 @@ name: deploy app to kubernetes cluster
 
 on: workflow_dispatch
 
+env:
+  CLUSTER_NAME: crawler-cluster
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -22,16 +25,12 @@ jobs:
         yc config set cloud-id $YC_CLOUD_ID
         yc config set folder-id $YC_FOLDER_ID
       env:
+        YC_TOKEN: ${{secrets.YC_TOKEN}}
         YC_CLOUD_ID: ${{secrets.YC_CLOUD_ID}}
         YC_FOLDER_ID: ${{secrets.YC_FOLDER_ID}}
-        YC_TOKEN: ${{secrets.YC_TOKEN}}
 
-    - name: Create kubeconfig
-      run: yc managed-kubernetes cluster get-credentials crawler-cluster --external --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID --token $YC_TOKEN
-      env:
-        YC_CLOUD_ID: ${{secrets.YC_CLOUD_ID}}
-        YC_FOLDER_ID: ${{secrets.YC_FOLDER_ID}}
-        YC_TOKEN: ${{secrets.YC_TOKEN}}
+    - name: Create kubeconfig via yc
+      run: yc managed-kubernetes cluster get-credentials $CLUSTER_NAME --external --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID --token $YC_TOKEN
 
     - name: Install helm
       uses: azure/setup-helm@v1
