@@ -1,0 +1,26 @@
+name: deploy app to kubernetes cluster
+
+on: workflow_dispatch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check Out Repo 
+      uses: actions/checkout@v2
+
+    - name: Generate kubeconfig
+      run: |
+        curl -s https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
+        echo "~/yandex-cloud/bin" >> $GITHUB_PATH
+        yc managed-kubernetes cluster get-credentials crawler-cluster --external --token $YC_TOKEN
+      env:
+        YC_TOKEN: ${{secrets.YC_TOKEN}}
+
+
+    - name: check
+      shell: bash
+      run: |
+        kubectl version
+
