@@ -33,8 +33,12 @@ jobs:
         YC_FOLDER_ID: ${{secrets.YC_FOLDER_ID}}
         YC_TOKEN: ${{secrets.YC_TOKEN}}
 
+    - name: Install helm
+      uses: azure/setup-helm@v1
+
     - name: check
       shell: bash
       run: |
         kubectl version
+        helm version
 
